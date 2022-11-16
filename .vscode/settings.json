@@ -1,0 +1,14 @@
+{
+  "ada.projectFile": "main.gpr",
+  "ada.scenarioVariables": {
+    "BINUTILS_BUILD_DIR": "/null",
+    "BINUTILS_SRC_DIR": "/null"
+  },
+  "ada.defaultCharset": "utf-8",
+  "ada.enableDiagnostics": false,
+  "ada.renameInComments": false,
+  "[ada]": {
+    "editor.defaultFormatter": "AdaCore.ada"
+  },
+  "editor.formatOnSave": true
+}
