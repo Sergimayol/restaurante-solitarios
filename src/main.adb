@@ -7,7 +7,7 @@ with def_monitor; use def_monitor;
 
 procedure Main is
 
--- Constantes
+   -- Constantes
    FicheroNombres : constant String := "nombres.txt";
    NumProcesos    : constant        := 7;
    NumFumadores   : constant        := NumProcesos;
