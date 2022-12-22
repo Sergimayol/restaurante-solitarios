@@ -7,13 +7,13 @@ package def_monitor is
         numMesasOc : Natural := 0;      -- Número de mesas ocupadas
         tipoSalon  : Natural :=
            0;   -- Tipo de salón (nada=0 / fumador=1 / no fumador=2)
-        clientes   : array
-           (1 .. numMesas) of String; -- Clientes que se encuentran en el salón
+        clientes   :  is array (Capacidad) of String; -- Clientes que se encuentran en el salón
     end record;
 
+    -- Monitor para gestionar el restaurante
     protected type MaitreMonitor is
         -- Encontrar el salón donde se encuentra una persona
-        function getSalon (nombre : String; tipo : Natural) return Natural;
+        function getSalon (nombre : String; tipo : Natural) return Integer;
         -- Devuelve el primer salón disponible dependiendo del tipo de cliente
         function getSalonDisponible (tipo : Natural) return Natural;
         -- Devuelve la capcidad máxima que puede tomar el restaurante con respecto al tipo de cliente (fumador/no fumador)
@@ -26,7 +26,7 @@ package def_monitor is
         maxSalones  : Natural := 3;
         numMesas    : Natural := 0;
         numClientes : Natural := 0;
-        salones     : array (1 .. maxSalones) of Salon;
+        salones     : is array (Capacidad) of Salon;
 
     end MaitreMonitor;
 
