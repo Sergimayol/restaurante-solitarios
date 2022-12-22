@@ -9,6 +9,16 @@ package body def_monitor is
             return 0;
         end getSalon;
 
+        function getSalonDisponible (tipo : Natural) return Natural is
+        begin
+            return 0;
+        end getSalonDisponible;
+
+        function getCapacidad (tipo : Natural) return Natural is
+        begin
+            return 0;
+        end getCapacidad;
+
         entry pedirMesa (tipo : Natural) when numMesas /= 0 is
         begin
             numMesas := numMesas - 1;
