@@ -10,5 +10,9 @@
   "[ada]": {
     "editor.defaultFormatter": "AdaCore.ada"
   },
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "github.copilot.enable": {
+    "*": true,
+    "ada": true
+  }
 }
