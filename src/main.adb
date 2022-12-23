@@ -9,45 +9,45 @@ procedure Main is
 
    -- Constantes
    FicheroNombres : constant String := "nombres.txt";
-   NumProcesos    : constant        := 7;
-   NumFumadores   : constant        := NumProcesos;
-   NumNoFumadores : constant        := NumProcesos;
+   NumProcesos    : constant        := 14;
+--   NumFumadores   : constant        := NumProcesos / 2;
+--   NumNoFumadores : constant        := NumProcesos / 2;
    monitor        : MaitreMonitor;
-   TipoFumador    : constant        := 1;
-   TipoNoFumador  : constant        := 2;
 
-   -- NoFumador
+   -- Cliente 
    task type Cliente is
-      entry Start (Nombre : in Unbounded_String; Tipo : in Integer);
+      entry Start (Nombre : in Unbounded_String; Tipo : in TipoSalonCliente);
    end Cliente;
 
    task body Cliente is
       Id          : Unbounded_String;
-      TipoCliente : Integer;
+      TipoCliente : TipoSalonCliente;
    begin
-      accept Start (Nombre : in Unbounded_String; Tipo : in Integer) do
+      accept Start (Nombre : in Unbounded_String; Tipo : in TipoSalonCliente) do
          Id          := Nombre;
          TipoCliente := Tipo;
       end Start;
-      Put_Line ("BON DIA sóm en " & Id & " i sóm No fumador");
+      Put_Line ("BON DIA sóm en " & Id & " i sóm " &TipoCliente'Img);
+      delay 1.0;
       monitor.pedirMesa (TipoCliente);
       Put_Line
         ("En " & Id & " diu: Prendré el menú del dia. Som al saló " &
          monitor.getSalon (To_String (Id), TipoCliente)'Img);
       delay 1.0;
       Put_Line ("En " & Id & " diu: Ja he dinat, el compte per favor");
-      monitor.pedirCuenta (TipoCliente);
+      monitor.pedirCuenta (TipoCliente, To_String(Id));
       Put_Line ("En " & Id & " SE'NVA");
    end Cliente;
 
    subtype Index_Noms is Positive range Positive'First .. NumProcesos;
    type Array_Noms is array (Index_Noms) of Unbounded_String;
+    
+   type ArrCliente is array (0 .. NumProcesos) of Cliente;
 
    F           : File_Type;
    Nombres     : Array_Noms;
    -- Variables
-   Fumadores   : array (1 .. NumFumadores) of Cliente;
-   NoFumadores : array (1 .. NumNoFumadores) of Cliente;
+   Clientes    : ArrCliente;
 
 begin
    Open (F, In_File, FicheroNombres);
@@ -56,12 +56,19 @@ begin
    end loop;
    Close (F);
    Put_Line ("++++++++++ El Maître està preparat");
+   monitor.iniciarSalones;  -- Iniciar salones con id correspondiente
    Put_Line ("++++++++++ Hi ha salons amb capacitat de 3 comensals cada un");
    delay 1.0;
-   for i in Fumadores'Range loop
-      Fumadores (i).Start (Nombres (Array_Noms'First + i), TipoFumador);
-   end loop;
-   for i in NoFumadores'Range loop
-      NoFumadores (i).Start (Nombres (Array_Noms'First + i), TipoNoFumador);
+   for i in Clientes'Range loop
+     declare
+       res : Integer := i mod 2;
+      begin
+        if res > 0 then
+          Clientes(i).Start(Nombres(Array_Noms'First + i), Fumador);
+        else
+          Clientes(i).Start(Nombres(Array_Noms'First + i), NoFumador);
+        end if;
+        delay 0.5;
+      end;
    end loop;
 end Main;
