@@ -37,14 +37,14 @@ package body def_monitor is
         entry pedirMesa (tipo : TipoSalonCliente) when mesasLibres /= 0 is
         begin
           mesasLibres := mesasLibres - 1;
-          Put_Line("Quedan estas mesas: "&mesasLibres'Img);
+          --Put_Line("Quedan estas mesas: "&mesasLibres'Img);
           numClientes := numClientes + 1;
         end pedirMesa;
 
         procedure pedirCuenta (tipo : TipoSalonCliente; nombre : String) is
         begin
           mesasLibres := mesasLibres + 1;
-          Put_Line("Quedan estas mesas: "&mesasLibres'Img);
+          --Put_Line("Quedan estas mesas: "&mesasLibres'Img);
           numClientes := numClientes - 1;
         end pedirCuenta;
 
