@@ -42,7 +42,7 @@ procedure Main is
    subtype Index_Noms is Positive range Positive'First .. NumProcesos;
    type Array_Noms is array (Index_Noms) of Unbounded_String;
     
-   type ArrCliente is array (0 .. NumProcesos) of Cliente;
+   type ArrCliente is array (0 .. NumProcesos - 1) of Cliente;
 
    F           : File_Type;
    Nombres     : Array_Noms;
