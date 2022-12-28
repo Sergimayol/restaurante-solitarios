@@ -2,6 +2,8 @@
 
 ## Restaurante solitarios
 
+Práctica 2 de la asignatura de programación concurrente.
+
 ## Desarrollo
 
 ### Prerrequisitos
