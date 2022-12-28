@@ -28,11 +28,14 @@ package def_monitor is
     protected type MaitreMonitor is
         -- Encontrar el salón donde se encuentra una persona
         function getSalon (nombre : String; tipo : TipoSalonCliente) return Integer;
-        -- Devuelve el primer salón disponible dependiendo del tipo de cliente
+        -- Devuelve el numSalon primer salón disponible dependiendo del tipo de cliente
+        -- 0 si no lo encuentra
+        -- 1..N si lo encuentra
         function getSalonDisponible (tipo : TipoSalonCliente) return Natural;
-        -- Devuelve la capcidad máxima que puede tomar el restaurante con respecto al tipo de cliente (fumador/no fumador)
+        -- Devuelve la capcidad máxima que puede tomar el restaurante con respecto 
+        -- al tipo de cliente (fumador/no fumador)
         function getCapacidad (tipo : TipoSalonCliente) return Natural;
-        entry pedirMesa (tipo : TipoSalonCliente);   -- Entrar al restaurante
+        entry pedirMesa (TipoSalonCliente);   -- Entrar al restaurante
         procedure pedirCuenta (tipo : TipoSalonCliente; nombre : String); -- Salir del restaurante
         procedure iniciarSalones; -- Iniciar lista de salones
         procedure verSalones;

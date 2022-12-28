@@ -25,17 +25,38 @@ package body def_monitor is
 
         function getSalonDisponible (tipo : TipoSalonCliente) return Natural is
         begin
-            return 0;
+          return salonDisponible : Natural := 0 do
+            for i in Salones'Range loop
+              if (Salones(i).tipoSalon = tipo or Salones(i).tipoSalon = Nada) 
+                and Salones(i).numMesasOc /= Salones(i).numMesas then
+                salonDisponible := Salones(i).numSalon;
+              end if;
+            end loop;
+          end return;
         end getSalonDisponible;
 
         function getCapacidad (tipo : TipoSalonCliente) return Natural is
         begin
-            return 0;
+          return capacidad : Natural := 0 do
+            for i in Salones'Range loop-- Por cada salón
+              -- Si el tipo del salon es igual al del parámetro o no tiene
+              -- tipo el salon implica que hay capacidad para el cliente
+              if Salones(i).tipoSalon = tipo or Salones(i).tipoSalon = Nada then
+                capacidad := capacidad + 1;
+              end if;
+            end loop;
+          end return;
         end getCapacidad;
 
-        -- Entraré cuando haya capacidad en un salón de mi tipo
-        entry pedirMesa (tipo : TipoSalonCliente) when mesasLibres /= 0 is
+        -- Entrar cuando haya capacidad en un salón de mi tipo
+        entry pedirMesa (for tipo in TipoSalonCliente) when getCapacidad(tipo) /= 0 is
         begin
+          -- Asignarle una mesa del primer salón que haya de su tipo o vacio con mesa libre
+          -- Cambiar el tipo del salón al tipo del cliente en caso de no tener
+          -- Añadir el cliente al salón
+          -- Aumentar el número de mesas ocupadas en el salón
+
+          -- Variables para solo dar info a la hora de programar, borrar en entrega
           mesasLibres := mesasLibres - 1;
           --Put_Line("Quedan estas mesas: "&mesasLibres'Img);
           numClientes := numClientes + 1;
@@ -43,6 +64,12 @@ package body def_monitor is
 
         procedure pedirCuenta (tipo : TipoSalonCliente; nombre : String) is
         begin
+          -- Encontrar el salón donde se encuentra el cliente
+          -- Disminuir el num de mesas ocupadas
+          -- Quitar al cliente del salón
+          -- En el caso de quedarse el salón vacio cambiar el tipo del salón a nada
+
+          -- Variables para solo dar info a la hora de programar, borrar en entrega
           mesasLibres := mesasLibres + 1;
           --Put_Line("Quedan estas mesas: "&mesasLibres'Img);
           numClientes := numClientes - 1;
