@@ -35,6 +35,24 @@ package body def_monitor is
           end return;
         end getSalonDisponible;
 
+        procedure addCliente(idSalonCliente : Integer; nombre : String) is
+        begin
+          for i in salones(idSalonCliente).clientes'Range loop -- Por cada cliente en el salón
+            if salones(idSalonCliente).clientes(i) = "" then
+              salones(idSalonCliente).clientes(i) := To_Unbounded_String(nombre);
+            end if;
+          end loop;
+        end addCliente;
+
+        procedure borrarCliente(idSalonCliente : Integer; nombre : String) is
+        begin
+          for i in salones(idSalonCliente).clientes'Range loop -- Por cada cliente en el salón
+            if salones(idSalonCliente).clientes(i) = nombre then
+              salones(idSalonCliente).clientes(i) := To_Unbounded_String("");
+            end if;
+          end loop;
+        end borrarCliente;
+
         function getCapacidad (tipo : TipoSalonCliente) return Natural is
         begin
           return capacidad : Natural := 0 do
@@ -42,37 +60,77 @@ package body def_monitor is
               -- Si el tipo del salon es igual al del parámetro o no tiene
               -- tipo el salon implica que hay capacidad para el cliente
               if Salones(i).tipoSalon = tipo or Salones(i).tipoSalon = Nada then
-                capacidad := capacidad + 1;
+                capacidad := capacidad + (Salones(i).numMesas - Salones(i).numMesasOc);
               end if;
             end loop;
           end return;
         end getCapacidad;
 
         -- Entrar cuando haya capacidad en un salón de mi tipo
-        entry pedirMesa (for tipo in TipoSalonCliente) when getCapacidad(tipo) /= 0 is
+        entry pedirMesa (for tipo in TipoSalonCliente) (nombre : String) when getCapacidad(tipo) /= 0 is
+          idSalonCliente : Integer := 0;
         begin
           -- Asignarle una mesa del primer salón que haya de su tipo o vacio con mesa libre
+          idSalonCliente := getSalonDisponible(tipo);
           -- Cambiar el tipo del salón al tipo del cliente en caso de no tener
+          if salones(idSalonCliente).tipoSalon = Nada then
+            salones(idSalonCliente).tipoSalon := tipo;
+          end if;
           -- Añadir el cliente al salón
+          addCliente(idSalonCliente, nombre);
           -- Aumentar el número de mesas ocupadas en el salón
+          salones(idSalonCliente).numMesasOc := salones(idSalonCliente).numMesasOc + 1;
+
+          -- Imprimir mensaje de información
+          if tipo = Fumador then
+            Put_Line("---------- En " &nombre& " te taula al saló de " 
+              & salones(idSalonCliente).tipoSalon'Img & salones(idSalonCliente).numSalon'Img);
+          else
+            Put_Line("********** En " &nombre& " te taula al saló de " 
+              & salones(idSalonCliente).tipoSalon'Img & salones(idSalonCliente).numSalon'Img);
+          end if;
 
           -- Variables para solo dar info a la hora de programar, borrar en entrega
           mesasLibres := mesasLibres - 1;
           --Put_Line("Quedan estas mesas: "&mesasLibres'Img);
           numClientes := numClientes + 1;
+          --Put_Line("Num clientes = " &numClientes'Img);
         end pedirMesa;
 
         procedure pedirCuenta (tipo : TipoSalonCliente; nombre : String) is
+          idSalonCliente : Integer := 0;
+          mesasDisponiblesSalon : Integer := 0;
         begin
           -- Encontrar el salón donde se encuentra el cliente
+          idSalonCliente := getSalon(nombre, tipo);
           -- Disminuir el num de mesas ocupadas
+          salones(idSalonCliente).numMesasOc := salones(idSalonCliente).numMesasOc - 1;
           -- Quitar al cliente del salón
+          borrarCliente(idSalonCliente, nombre);
           -- En el caso de quedarse el salón vacio cambiar el tipo del salón a nada
+          if salones(idSalonCliente).numMesasOc = 0 then
+            salones(idSalonCliente).tipoSalon := Nada;
+          end if;
+
+          -- Imprimir mensaje de información
+          mesasDisponiblesSalon := salones(idSalonCliente).numMesas - salones(idSalonCliente).numMesasOc;
+          if tipo = Fumador then
+            Put_Line("---------- En " &nombre& " allibera una taula del saló " & 
+              salones(idSalonCliente).numSalon'Img & ". Disponibilitat: " &
+              mesasDisponiblesSalon'Img &
+              " Tipus: " & salones(idSalonCliente).tipoSalon'Img);
+          else
+            Put_Line("---------- En " &nombre& " allibera una taula del saló " & 
+              salones(idSalonCliente).numSalon'Img & ". Disponibilitat: " &
+              mesasDisponiblesSalon'Img &
+              " Tipus: " & salones(idSalonCliente).tipoSalon'Img);
+          end if;
 
           -- Variables para solo dar info a la hora de programar, borrar en entrega
           mesasLibres := mesasLibres + 1;
           --Put_Line("Quedan estas mesas: "&mesasLibres'Img);
           numClientes := numClientes - 1;
+          --Put_Line("Num clientes = " &numClientes'Img);
         end pedirCuenta;
 
         procedure iniciarSalones is

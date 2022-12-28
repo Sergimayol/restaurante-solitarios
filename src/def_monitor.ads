@@ -35,10 +35,12 @@ package def_monitor is
         -- Devuelve la capcidad máxima que puede tomar el restaurante con respecto 
         -- al tipo de cliente (fumador/no fumador)
         function getCapacidad (tipo : TipoSalonCliente) return Natural;
-        entry pedirMesa (TipoSalonCliente);   -- Entrar al restaurante
+        entry pedirMesa (TipoSalonCliente) (nombre : in String);   -- Entrar al restaurante
         procedure pedirCuenta (tipo : TipoSalonCliente; nombre : String); -- Salir del restaurante
         procedure iniciarSalones; -- Iniciar lista de salones
         procedure verSalones;
+        procedure addCliente(idSalonCliente : Integer; nombre : String);
+        procedure borrarCliente(idSalonCliente : Integer; nombre : String);
 
     private
         numClientes : Natural := 0;     -- Num clientes
