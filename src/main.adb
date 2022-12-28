@@ -27,16 +27,35 @@ procedure Main is
          Id          := Nombre;
          TipoCliente := Tipo;
       end Start;
-      Put_Line ("BON DIA sóm en " & Id & " i sóm " &TipoCliente'Img);
+      if TipoCliente = Fumador then
+        Put_Line ("BON DIA sóm en " & Id & " i sóm " &TipoCliente'Img);
+      else
+        Put_Line ("     BON DIA sóm en " & Id & " i sóm " &TipoCliente'Img);
+      end if;
       delay 1.0;
-      monitor.pedirMesa (TipoCliente);
-      Put_Line
-        ("En " & Id & " diu: Prendré el menú del dia. Som al saló " &
-         monitor.getSalon (To_String (Id), TipoCliente)'Img);
+      monitor.pedirMesa (TipoCliente) (To_String(Id));
+      delay 0.5;
+      if TipoCliente = Fumador then
+        Put_Line
+          ("En " & Id & " diu: Prendré el menú del dia. Som al saló " &
+            monitor.getSalon (To_String (Id), TipoCliente)'Img);
+      else
+        Put_Line
+          ("     En " & Id & " diu: Prendré el menú del dia. Som al saló " &
+            monitor.getSalon (To_String (Id), TipoCliente)'Img);
+      end if;
       delay 1.0;
-      Put_Line ("En " & Id & " diu: Ja he dinat, el compte per favor");
+      if TipoCliente = Fumador then
+        Put_Line ("En " & Id & " diu: Ja he dinat, el compte per favor");
+      else
+        Put_Line ("     En " & Id & " diu: Ja he dinat, el compte per favor");
+      end if;
       monitor.pedirCuenta (TipoCliente, To_String(Id));
-      Put_Line ("En " & Id & " SE'NVA");
+      if TipoCliente = Fumador then
+        Put_Line ("En " & Id & " SE'NVA");
+      else
+        Put_Line ("     En " & Id & " SE'NVA");
+      end if;
    end Cliente;
 
    subtype Index_Noms is Positive range Positive'First .. NumProcesos;
