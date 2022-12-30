@@ -40,6 +40,7 @@ package body def_monitor is
           for i in salones(idSalonCliente).clientes'Range loop -- Por cada cliente en el salón
             if salones(idSalonCliente).clientes(i) = "" then
               salones(idSalonCliente).clientes(i) := To_Unbounded_String(nombre);
+              return; -- Acabar bucle
             end if;
           end loop;
         end addCliente;
@@ -81,6 +82,8 @@ package body def_monitor is
           -- Aumentar el número de mesas ocupadas en el salón
           salones(idSalonCliente).numMesasOc := salones(idSalonCliente).numMesasOc + 1;
 
+          -- debugSalon(idSalonCliente);
+
           -- Imprimir mensaje de información
           if tipo = Fumador then
             Put_Line("---------- En " &nombre& " te taula al saló de " 
@@ -111,6 +114,8 @@ package body def_monitor is
           if salones(idSalonCliente).numMesasOc = 0 then
             salones(idSalonCliente).tipoSalon := Nada;
           end if;
+
+          -- debugSalon(idSalonCliente);
 
           -- Imprimir mensaje de información
           mesasDisponiblesSalon := salones(idSalonCliente).numMesas - salones(idSalonCliente).numMesasOc;
@@ -146,6 +151,23 @@ package body def_monitor is
             Put_Line("Salón " &Integer'Image(i)& " es " &Integer'Image(salones(i).numSalon));
           end loop;
         end verSalones;
+
+        procedure debugSalon (id : Integer) is
+          salonToDebug : Salon := salones(id);
+        begin
+          salonToDebug := salones(id);
+          Put_Line("");
+          Put_Line("Id salon =" &salonToDebug.numSalon'Img);
+          Put_Line("numMesas =" &salonToDebug.numMesas'Img);
+          Put_Line("numMesasOc =" &salonToDebug.numMesasOc'Img);
+          Put_Line("tipoSalon=" &salonToDebug.tipoSalon'Img);
+          Put_Line("clientes=[");
+          for i in salonToDebug.clientes'Range loop
+            Put_Line(i'Img& " ->" &salonToDebug.clientes(i));
+          end loop;
+          Put_Line("]");
+          Put_Line("");
+        end debugSalon;
 
     end MaitreMonitor;
 

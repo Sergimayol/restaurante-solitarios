@@ -41,6 +41,7 @@ package def_monitor is
         procedure verSalones;
         procedure addCliente(idSalonCliente : Integer; nombre : String);
         procedure borrarCliente(idSalonCliente : Integer; nombre : String);
+        procedure debugSalon(id : Integer);
 
     private
         numClientes : Natural := 0;     -- Num clientes
