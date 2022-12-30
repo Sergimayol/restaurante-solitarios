@@ -4,7 +4,7 @@ package body def_monitor is
 
     protected body MaitreMonitor is
 
-        function getSalon (nombre : String; tipo : TipoSalonCliente) return Integer is
+        function getSalon (nombre : String; tipo : TipoSalonCliente) return Natural is
         begin
             for i in Salones'Range loop -- Por cada salón
                 -- Si el salón actual es del tipo que se busca,
@@ -19,20 +19,20 @@ package body def_monitor is
                     end loop;
                 end if;
             end loop;
-            -- Si no se encuentra el salón devuelve -1
-            return -1;
+            -- Si no se encuentra el salón devuelve 0 
+            return 0;
         end getSalon;
 
         function getSalonDisponible (tipo : TipoSalonCliente) return Natural is
         begin
-          return salonDisponible : Natural := 0 do
-            for i in Salones'Range loop
+          for i in Salones'Range loop -- Por cada salón
+              -- Si el tipo es del mismo tipo o no tiene salón y hay hueco devuelve el id del salón
               if (Salones(i).tipoSalon = tipo or Salones(i).tipoSalon = Nada) 
                 and Salones(i).numMesasOc /= Salones(i).numMesas then
-                salonDisponible := Salones(i).numSalon;
+                return Salones(i).numSalon;
               end if;
-            end loop;
-          end return;
+          end loop;
+          return 0;
         end getSalonDisponible;
 
         procedure addCliente(idSalonCliente : Integer; nombre : String) is
@@ -50,21 +50,22 @@ package body def_monitor is
           for i in salones(idSalonCliente).clientes'Range loop -- Por cada cliente en el salón
             if salones(idSalonCliente).clientes(i) = nombre then
               salones(idSalonCliente).clientes(i) := To_Unbounded_String("");
+              return;
             end if;
           end loop;
         end borrarCliente;
 
         function getCapacidad (tipo : TipoSalonCliente) return Natural is
+          capacidad : Natural := 0;
         begin
-          return capacidad : Natural := 0 do
-            for i in Salones'Range loop-- Por cada salón
+          for i in Salones'Range loop-- Por cada salón
               -- Si el tipo del salon es igual al del parámetro o no tiene
               -- tipo el salon implica que hay capacidad para el cliente
-              if Salones(i).tipoSalon = tipo or Salones(i).tipoSalon = Nada then
-                capacidad := capacidad + (Salones(i).numMesas - Salones(i).numMesasOc);
-              end if;
-            end loop;
-          end return;
+            if Salones(i).tipoSalon = tipo or Salones(i).tipoSalon = Nada then
+              capacidad := capacidad + (Salones(i).numMesas - Salones(i).numMesasOc);
+            end if;
+          end loop;
+          return capacidad;
         end getCapacidad;
 
         -- Entrar cuando haya capacidad en un salón de mi tipo

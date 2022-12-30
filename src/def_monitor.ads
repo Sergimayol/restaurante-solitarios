@@ -12,13 +12,11 @@ package def_monitor is
 
     -- Estructura de datos para gestionar los salones
     type Salon is tagged record
-    -- Da problemas pasarle un parámetro
-    --type Salon (Id : Natural) is tagged record 
-        numSalon   : Natural    := 0;      -- Identificador del salón
-        numMesas   : Natural    := 3;       -- Número de mesas del salón
-        numMesasOc : Natural    := 0;       -- Número de mesas ocupadas
+        numSalon   : Natural          := 0;     -- Identificador del salón
+        numMesas   : Natural          := 3;     -- Número de mesas del salón
+        numMesasOc : Natural          := 0;     -- Número de mesas ocupadas
         tipoSalon  : TipoSalonCliente := Nada;  -- Tipo Salón
-        clientes   : ArrStr;                -- Clientes que se encuentran en el salón
+        clientes   : ArrStr;                    -- Clientes que se encuentran en el salón
     end record;
 
     -- Array de salones
@@ -27,7 +25,9 @@ package def_monitor is
     -- Monitor para gestionar el restaurante
     protected type MaitreMonitor is
         -- Encontrar el salón donde se encuentra una persona
-        function getSalon (nombre : String; tipo : TipoSalonCliente) return Integer;
+        -- 0 si no lo encuentra
+        -- 1..N si lo encuentra
+        function getSalon (nombre : String; tipo : TipoSalonCliente) return Natural;
         -- Devuelve el numSalon primer salón disponible dependiendo del tipo de cliente
         -- 0 si no lo encuentra
         -- 1..N si lo encuentra
@@ -35,13 +35,19 @@ package def_monitor is
         -- Devuelve la capcidad máxima que puede tomar el restaurante con respecto 
         -- al tipo de cliente (fumador/no fumador)
         function getCapacidad (tipo : TipoSalonCliente) return Natural;
-        entry pedirMesa (TipoSalonCliente) (nombre : in String);   -- Entrar al restaurante
-        procedure pedirCuenta (tipo : TipoSalonCliente; nombre : String); -- Salir del restaurante
-        procedure iniciarSalones; -- Iniciar lista de salones
+        -- Entrar al restaurante
+        entry pedirMesa (TipoSalonCliente) (nombre : in String);
+        -- Salir del restaurante
+        procedure pedirCuenta (tipo : TipoSalonCliente; nombre : String);
+        -- Iniciar lista de salones
+        procedure iniciarSalones; 
+        -- Añade un cliente a un salón
+        procedure addCliente (idSalonCliente : Integer; nombre : String);
+        -- Elimina el cliente de un salón
+        procedure borrarCliente (idSalonCliente : Integer; nombre : String);
+        -- Funciones para debuger el programa
+        procedure debugSalon (id : Integer);
         procedure verSalones;
-        procedure addCliente(idSalonCliente : Integer; nombre : String);
-        procedure borrarCliente(idSalonCliente : Integer; nombre : String);
-        procedure debugSalon(id : Integer);
 
     private
         numClientes : Natural := 0;     -- Num clientes
