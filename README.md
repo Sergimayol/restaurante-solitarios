@@ -6,7 +6,7 @@ Práctica 2 de la asignatura de programación concurrente.
 
 ## Desarrollo
 
-### Prerrequisitos
+### Prerrequisitos (Opcional)
 
 - [Docker](https://docs.docker.com/install/)
 
@@ -29,5 +29,5 @@ Ctrl + Shift + B
 Para ejecutar el proyecto, ejecutar:
 
 ```bash
-./objs/main
+.objs/main
 ```
