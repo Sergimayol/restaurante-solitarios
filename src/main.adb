@@ -34,7 +34,6 @@ procedure Main is
       end if;
       delay 1.0;
       monitor.pedirMesa (TipoCliente) (To_String(Id));
-      delay 0.5;
       if TipoCliente = Fumador then
         Put_Line
           ("En " & Id & " diu: Prendré el menú del dia. Som al saló " &
@@ -44,7 +43,7 @@ procedure Main is
           ("     En " & Id & " diu: Prendré el menú del dia. Som al saló " &
             monitor.getSalon (To_String (Id), TipoCliente)'Img);
       end if;
-      delay 1.0;
+      delay 3.5;
       if TipoCliente = Fumador then
         Put_Line ("En " & Id & " diu: Ja he dinat, el compte per favor");
       else
